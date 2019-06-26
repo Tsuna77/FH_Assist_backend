@@ -1,4 +1,5 @@
 falcon==2.0.0
+falcon-swagger-ui==1.1.2
 gunicorn==19.9.0
 google==2.0.2
 google-oauth==1.0.1

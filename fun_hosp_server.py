@@ -1,15 +1,28 @@
 #!/usr/bin/env python3
 # coding: utf8
 
-import falcon
+# dépendance python native
 import json
 import logging
 import traceback
+import pathlib
 
+# dépendance au moteur API falcon
+import falcon
+from falcon_swagger_ui import register_swaggerui_app
 
+# dépendance au moteur google Oauth
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from secret import GOOGLE_API_KEY
+
+SWAGGERUI_URL = '/swagger'
+SCHEMA_URL =  '/static/v1/swagger.yaml'
+STATIC_PATH = pathlib.Path(__file__).parent / 'static'
+
+
+page_title = 'FH_Assist Swagger Doc'
+favicon_url = 'https://funhospital.tsuna.fr/favicon.ico'
 
 logging.basicConfig(filename='example.log',level=logging.DEBUG)
 logging.info("Démarrage de l'api")
@@ -50,3 +63,13 @@ class fh_login:
 
 api = falcon.API()
 api.add_route("/connect",fh_login())
+# Ajout du swagger de l'API
+api.add_static_route('/static', str(STATIC_PATH))
+
+
+register_swaggerui_app(
+    api, SWAGGERUI_URL, SCHEMA_URL,
+    page_title=page_title,
+    favicon_url=favicon_url,
+    config={'supportedSubmitMethods': ['get'], }
+)

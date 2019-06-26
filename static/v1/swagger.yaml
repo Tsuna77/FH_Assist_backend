@@ -1,0 +1,66 @@
+swagger: "2.0"
+info:
+  description: "API backend pour l'assistant fun hospital développé par la ligue S.e.x.y psychiatrie du serveur EU-04"
+  version: "1.0.0"
+  title: "Swagger FH_Assistant"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: 
+  - "funhospital.tsuna.fr"
+basePath: "/services"
+tags:
+- name: "connect"
+  description: "Module de connection/enregistrement de compte"
+schemes:
+- "https"
+paths:
+  /connect:
+    post:
+      tags:
+      - "connect"
+      summary: "Connection"
+      description: ""
+      operationId: "connect"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Information envoyé au serveur pour validation du token google Oauth"
+        required: true
+        schema:
+          $ref: "#/definitions/connect"
+      responses:
+        401:
+          description: "Erreur de validation du token"
+        200:
+          description: "Token accepté et compte connecté"
+        400:
+          description: "Body mal formé"
+securityDefinitions:
+  fhstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+definitions:
+  connect:
+    type: "object"
+    properties:
+      token:
+        type: "string"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int32"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
