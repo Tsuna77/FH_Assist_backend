@@ -19,13 +19,19 @@ class fh_hospitals:
 
     def on_get(self, req, resp):
         rootLogger.info("Appel de la commande GET de l'api fh_hospitals")
-        user=connect_from_header_connection(req,resp,self.db)
-        rootLogger.debug("Récupération des hopitaux de l'utilisateur "+str(user))
-        hospitals=self.db.list_hospitals(user['id']);
-        hosp={}
-        hosp['hospitals']=[]
+        try:
+            user = connect_from_header_connection(req, resp, self.db)
+
+        except Exception as e:
+            rootLogger.error(str(e))
+            send_resp(resp, falcon.HTTP_401, 401, "error", str(e))
+            return
+        rootLogger.debug(
+            "Récupération des hopitaux de l'utilisateur "+str(user))
+        hospitals = self.db.list_hospitals(user['id'])
+        hosp = {}
+        hosp['hospitals'] = []
         for hospital in hospitals:
             rootLogger.debug(hospital)
-            hosp['hospitals'].append({"name":hospital[2],"id":hospital[0]})
-        send_resp(resp,falcon.HTTP_200,200,'hospitals',hosp)
-
+            hosp['hospitals'].append({"name": hospital[2], "id": hospital[0]})
+        send_resp(resp, falcon.HTTP_200, 200, 'hospitals', hosp)
