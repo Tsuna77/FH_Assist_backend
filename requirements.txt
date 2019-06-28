@@ -5,3 +5,5 @@ google==2.0.2
 google-oauth==1.0.1
 google-auth==1.6.3
 mysql-connector==2.2.9
+yoyo-migrations==6.1.0
+PyMySQL==0.9.3
