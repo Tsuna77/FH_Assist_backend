@@ -1,0 +1,21 @@
+version: '3'
+services:
+  web:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      ADMINER_DEFAULT_SERVER: bdd
+    links:
+      - bdd
+  bdd:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: passwd
+      MYSQL_DATABASE: FH_Assistant
+      MYSQL_USER: fhassist
+      MYSQL_PASSWORD: fhassist
+
