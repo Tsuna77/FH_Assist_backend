@@ -77,5 +77,5 @@ class fh_bdd:
         rootLogger.debug("Création de l'hopital "+name+" pour l'utilisateur "+str(userid))
         curseur = self.cnx.cursor()
         curseur.execute(
-            "INSERT INTO `FH_hospital` (`id`, `id_user`, `nom`) VALUES (NULL,'"+str(userid)+"' ,'"+name+"')")
+            "INSERT INTO `FH_hospital` (`id`, `id_user`, `nom`) VALUES (NULL,'"+str(userid)+"' ,%s)", (name,))
 
