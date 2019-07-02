@@ -1,0 +1,132 @@
+_type: export
+__export_format: 4
+__export_date: 2019-07-02T18:00:27.302Z
+__export_source: insomnia.desktop.app:v6.5.4
+resources:
+  - _id: req_fda3827498db408685291f99377485fe
+    authentication: {}
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"token": "{{ token  }}"
+        }
+    created: 1560890713715
+    description: ""
+    headers:
+      - id: pair_3b4fa153192a465f9041c28282491b18
+        name: Content-Type
+        value: application/json
+    isPrivate: false
+    metaSortKey: -1560890713715
+    method: POST
+    modified: 1561733361265
+    name: connect
+    parameters: []
+    parentId: fld_713347aa0d1f49c89a71e32b44c671f1
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingSendCookies: true
+    settingStoreCookies: true
+    url: "{{ api_server  }}connect"
+    _type: request
+  - _id: fld_713347aa0d1f49c89a71e32b44c671f1
+    created: 1560890704838
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1560890704838
+    modified: 1560890704838
+    name: fun hospital assistant
+    parentId: wrk_555444b3acf448bbb481fad5a151a988
+    _type: request_group
+  - _id: wrk_555444b3acf448bbb481fad5a151a988
+    created: 1560890675893
+    description: ""
+    modified: 1560890675893
+    name: Insomnia
+    parentId: null
+    _type: workspace
+  - _id: req_d7e12aaa888a456dbfe8bf09aa915587
+    authentication: {}
+    body: {}
+    created: 1561733331127
+    description: ""
+    headers:
+      - id: pair_b642cc35cbc84ccbaef13a1c3214d86b
+        name: Authorization
+        value: "{{ token  }}"
+    isPrivate: false
+    metaSortKey: -1561733331127
+    method: GET
+    modified: 1561736552480
+    name: list_hospitals
+    parameters: []
+    parentId: fld_f58e8d3542bd47009ff1ba4bc3b7fb1a
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingSendCookies: true
+    settingStoreCookies: true
+    url: "{{ api_server  }}hospitals"
+    _type: request
+  - _id: fld_f58e8d3542bd47009ff1ba4bc3b7fb1a
+    created: 1561736543360
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1561736543360
+    modified: 1561736543360
+    name: hospitals
+    parentId: fld_713347aa0d1f49c89a71e32b44c671f1
+    _type: request_group
+  - _id: env_8b78c5d370cbdc1fdc5e021f35c6cea9891ad914
+    color: null
+    created: 1560890675989
+    data:
+      token: eyJhbGciOiJSUzI1NiIsImtpZCI6IjExOGRmMjU0YjgzNzE4OWQxYmMyYmU5NjUwYTgyMTEyYzAwZGY1YTQiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiYXpwIjoiODc4MDQ4NzY1OTUyLXJxMms3ZmM0aWRlcnZwNjQyMHNybG8zNDY5NDQ1ZTNvLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwiYXVkIjoiODc4MDQ4NzY1OTUyLXJxMms3ZmM0aWRlcnZwNjQyMHNybG8zNDY5NDQ1ZTNvLmFwcHMuZ29vZ2xldXNlcmNvbnRlbnQuY29tIiwic3ViIjoiMTA2MDI1OTg4MTE1MzA3MDQxMDI3IiwiZW1haWwiOiJyNzdyYXBoeUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6IlpuSlVuV3J2bEM5MDhpSGhVU1ZaZ3ciLCJuYW1lIjoiUmFwaGHDq2wgUmljb3JkZWF1IiwicGljdHVyZSI6Imh0dHBzOi8vbGgzLmdvb2dsZXVzZXJjb250ZW50LmNvbS8tcFJJdGctZWQzVG8vQUFBQUFBQUFBQUkvQUFBQUFBQUFCeU0vUUNqNHQ0MmNoQU0vczk2LWMvcGhvdG8uanBnIiwiZ2l2ZW5fbmFtZSI6IlJhcGhhw6tsIiwiZmFtaWx5X25hbWUiOiJSaWNvcmRlYXUiLCJsb2NhbGUiOiJmciIsImlhdCI6MTU2MTczOTMyMSwiZXhwIjoxNTYxNzQyOTIxLCJqdGkiOiIzZDU3MWFjZTJhMzYxZjZhYzM3ZmZhZDhhNWI3MjQ0NmQ5MmY3ZDJiIn0.H_6EV7_ntWg8Fwr0dwT0k_db3FtMiK7gBZ5lVSt1COV_6tMdCbQ5TTMVxayNKVGUoA7FYcIfHmONZjP2FURlNYlGr2V4rrAK6WC_wXLP28KXg2YmefZ7bZyMHTQGkY_-lA8ZA38qmAMGOgmq3M0JrHx8e-qMxUJG4SALmcFHhVxyhXpEtM3FgEsepj-CWTWmMvy08tqB15ur0ILpNOkW1ONNK2_rg01QP9vKKNv-mMTDKb2PBtE37MJuRe3pglnUR4NO9UPKPm766-5bzaNFFoIkTsp3fc-fK6Yu6ey3PLmouTdrJd27yEKR9oWT4JkFGsw5Qh1n2sl7sYbfcP8LMw
+    dataPropertyOrder:
+      "&":
+        - token
+    isPrivate: false
+    metaSortKey: 1560890675989
+    modified: 1561740536857
+    name: Base Environment
+    parentId: wrk_555444b3acf448bbb481fad5a151a988
+    _type: environment
+  - _id: jar_8b78c5d370cbdc1fdc5e021f35c6cea9891ad914
+    cookies: []
+    created: 1560890676004
+    modified: 1560890676004
+    name: Default Jar
+    parentId: wrk_555444b3acf448bbb481fad5a151a988
+    _type: cookie_jar
+  - _id: env_3755607212fc433ba3d2dd8048556bbf
+    color: null
+    created: 1561230812525
+    data:
+      api_server: https://funhospital.tsuna.fr/services/
+    dataPropertyOrder:
+      "&":
+        - api_server
+    isPrivate: false
+    metaSortKey: 1561230812525
+    modified: 1561230855036
+    name: funhospital.tsuna.fr
+    parentId: env_8b78c5d370cbdc1fdc5e021f35c6cea9891ad914
+    _type: environment
+  - _id: env_52a38b5ca4a6477aab0c6f9e3896445a
+    color: null
+    created: 1561230861064
+    data:
+      api_server: http://local.tsuna.fr:8000/
+    dataPropertyOrder:
+      "&":
+        - api_server
+    isPrivate: false
+    metaSortKey: 1561230861064
+    modified: 1561230894046
+    name: Local
+    parentId: env_8b78c5d370cbdc1fdc5e021f35c6cea9891ad914
+    _type: environment
