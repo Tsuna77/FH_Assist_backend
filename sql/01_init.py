@@ -42,7 +42,7 @@ step("""
     ENGINE = InnoDB;
     """)
 
-# Table contenant la liste des salles
+# Table contenant les stats des salles
 step("""
     CREATE TABLE `FH_Assistant`.`FH_Salles_Stats`
     (

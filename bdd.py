@@ -66,16 +66,41 @@ class fh_bdd:
         # ligne 1, colone 1
         return result[0][0]
 
-    def list_hospitals(self,userId):
-        rootLogger.debug("Récupération des hopitaux de l'utilsateur "+str(userId))
+    def list_hospitals(self, userId):
+        rootLogger.debug(
+            "Récupération des hopitaux de l'utilsateur "+str(userId))
         curseur = self.cnx.cursor()
-        curseur.execute("SELECT * from FH_hospital where id_user='"+str(userId)+"'")
+        curseur.execute(
+            "SELECT * from FH_hospital where id_user='"+str(userId)+"'")
         result = curseur.fetchall()
         return result
 
     def add_hospital(self, userid, name):
-        rootLogger.debug("Création de l'hopital "+name+" pour l'utilisateur "+str(userid))
+        rootLogger.debug("Création de l'hopital "+name +
+                         " pour l'utilisateur "+str(userid))
         curseur = self.cnx.cursor()
         curseur.execute(
             "INSERT INTO `FH_hospital` (`id`, `id_user`, `nom`) VALUES (NULL,'"+str(userid)+"' ,%s)", (name,))
 
+    def list_salles(self):
+        rootLogger.debug("Récupération des informations des salles")
+        curseur = self.cnx.cursor()
+        curseur.execute("SELECT * from FH_Salles_Def")
+        result = {}
+        for room in curseur.fetchall():
+            rootLogger.debug(
+                "Récupération des informations de la salle"+str(room))
+            room_info={}
+            curseur.execute(
+                "SELECT * from FH_Salles_Stats where `id_salles`="+str(room[0]))
+            for info_read in curseur.fetchall():
+                salle_lvl=info_read[2]
+                salle_cmp=info_read[3]
+                salle_tim=info_read[4]
+                room_info[salle_lvl]={}
+                room_info[salle_lvl]['comp']=salle_cmp
+                room_info[salle_lvl]['tim']=salle_tim
+            rootLogger.debug(room_info)
+            result[room[1]]=room_info
+        rootLogger.debug("liste_salles="+str(result))
+        return result

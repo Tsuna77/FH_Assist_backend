@@ -24,6 +24,7 @@ from wsgiref import simple_server
 from core import send_resp, valid_google_oauth_token, ResponseSchema
 
 from hospital import fh_hospitals
+from salles import fh_salles
 
 # le reste de l'appli
 from bdd import fh_bdd
@@ -89,8 +90,10 @@ try:
     api = falcon.API()
     connect_api=fh_login()
     hospital_api=fh_hospitals()
+    salles_api=fh_salles()
     api.add_route("/connect", connect_api)
     api.add_route("/hospitals", hospital_api)
+    api.add_route("/salles", salles_api)
     api.add_sink(handle_404, '')
 
     # Ajout du swagger de l'API
@@ -112,6 +115,7 @@ spec = APISpec(
 spec.components.schema('Response', schema=ResponseSchema)
 spec.path(resource=connect_api)
 spec.path(resource=hospital_api)
+spec.path(resource=salles_api)
 f= codecs.open(str(STATIC_PATH)+"/v1/swagger.yaml", "w", "utf-8")
 f.write(spec.to_yaml())
 f.close()
