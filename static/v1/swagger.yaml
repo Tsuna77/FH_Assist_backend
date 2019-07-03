@@ -16,9 +16,9 @@ info:
   title: Swagger FH_assistant
   version: 1.0.0
 paths:
-  /connect:
+  /v1/connect:
     post: {}
-  /hospitals:
+  /v1/hospitals:
     get:
       description: Recuperation de la liste des hopitaux
       responses:
@@ -49,7 +49,7 @@ paths:
           description: La ressource existe deja
           schema:
             $ref: '#/definitions/Response'
-  /salles:
+  /v1/salles:
     get:
       description: Recuperation de la liste des salles
       responses:

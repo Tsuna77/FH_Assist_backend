@@ -32,6 +32,7 @@ from logger import rootLogger
 
 SWAGGERUI_URL = '/swagger'
 SCHEMA_URL = '/static/v1/swagger.yaml'
+API_VERSION = 'v1'
 STATIC_PATH = pathlib.Path(__file__).parent / 'static'
 
 page_title = 'FH_Assist Swagger Doc'
@@ -41,10 +42,8 @@ favicon_url = 'https://funhospital.tsuna.fr/favicon.ico'
 rootLogger.info("Démarrage de l'api")
 
 
-
-
 def handle_404(req, resp):
-    send_resp(resp,falcon.HTTP_404,404,"error","API non trouvé")
+    send_resp(resp, falcon.HTTP_404, 404, "error", "API non trouvé")
 
 
 class fh_login:
@@ -63,37 +62,38 @@ class fh_login:
     def on_post(self, req, resp):
         rootLogger.info("Appel de la commande POST de l'api fh_login")
         # Demande de connexion à l'application
-        rootLogger.debug("Req = "+str(req))
+        rootLogger.debug("Req = {!r}".format(req))
         try:
             data = json.load(req.stream)
         except Exception as e:
-            send_resp(resp,falcon.HTTP_400,400,"error","Erreur lors de l'analyse du body envoyé")
+            send_resp(resp, falcon.HTTP_400, 400, "error",
+                      "Erreur lors de l'analyse du body envoyé")
             return
-        rootLogger.debug("data = "+str(data))
+        rootLogger.debug("data = {!r}".format(data))
 
         try:
-            idinfo= valid_google_oauth_token(data['token'])
+            idinfo = valid_google_oauth_token(data['token'])
 
             if not self.db.check_user_exist(idinfo['email']):
                 rootLogger.info(
-                    "L'utilisateur "+idinfo['email']+" n'éxiste pas encore dans la base")
+                    "L'utilisateur {!r} n'éxiste pas encore dans la base".format(idinfo['email']))
                 self.db.add_user(idinfo['email'])
-            send_resp(resp,falcon.HTTP_200,200,"info","Token valide")
+            send_resp(resp, falcon.HTTP_200, 200, "info", "Token valide")
             return
         except Exception as e:
             rootLogger.error(str(e))
-            send_resp(resp,falcon.HTTP_401,401,"error",str(e))
+            send_resp(resp, falcon.HTTP_401, 401, "error", str(e))
             return
 
 
 try:
     api = falcon.API()
-    connect_api=fh_login()
-    hospital_api=fh_hospitals()
-    salles_api=fh_salles()
-    api.add_route("/connect", connect_api)
-    api.add_route("/hospitals", hospital_api)
-    api.add_route("/salles", salles_api)
+    connect_api = fh_login()
+    hospital_api = fh_hospitals()
+    salles_api = fh_salles()
+    api.add_route("/{!s}/connect".format(API_VERSION), connect_api)
+    api.add_route("/{!s}/hospitals".format(API_VERSION), hospital_api)
+    api.add_route("/{!s}/salles".format(API_VERSION), salles_api)
     api.add_sink(handle_404, '')
 
     # Ajout du swagger de l'API
@@ -116,11 +116,11 @@ spec.components.schema('Response', schema=ResponseSchema)
 spec.path(resource=connect_api)
 spec.path(resource=hospital_api)
 spec.path(resource=salles_api)
-f= codecs.open(str(STATIC_PATH)+"/v1/swagger.yaml", "w", "utf-8")
+f = codecs.open(str(STATIC_PATH)+"/v1/swagger.yaml", "w", "utf-8")
 f.write(spec.to_yaml())
 f.close()
 
 
 if __name__ == '__main__':
-    httpd = simple_server.make_server('127.0.0.1', 8000, api)
+    httpd = simple_server.make_server('127.0.0.1', 8100, api)
     httpd.serve_forever()

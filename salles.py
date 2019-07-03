@@ -33,7 +33,8 @@ class fh_salles():
                     description: Erreur de token
                     schema: ResponseSchema
         """
-        rootLogger.info("Appel de la commande GET de l'api fh_salles sans paramètre")
+        rootLogger.info(
+            "Appel de la commande GET de l'api fh_salles sans paramètre")
         try:
             user = connect_from_header_connection(req, resp, self.db)
 
@@ -48,7 +49,7 @@ class fh_salles():
         salle['salles'] = {}
         rootLogger.debug(salles)
         for key, value in salles.items():
-            rootLogger.debug(key+"=>"+str(value))
-            salle['salles'][key]={}
-            salle['salles'][key]['levels']=value
+            rootLogger.debug("{}=>{}".format(key, value))
+            salle['salles'][key] = {}
+            salle['salles'][key]['levels'] = value
         send_resp(resp, falcon.HTTP_200, 200, 'salles', salle)

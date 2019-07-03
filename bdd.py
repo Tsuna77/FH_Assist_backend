@@ -33,16 +33,17 @@ class fh_bdd:
     def migration(self):
         rootLogger.debug("Lancement de la migration yoyo")
         backend = get_backend(
-            'mysql://'+BDD_INFO['user']+':'+BDD_INFO['password']+'@'+BDD_INFO['host']+'/'+BDD_INFO['database'])
+            'mysql://{user}:{password}@{host}/{database}'.format(**BDD_INFO))
         migrations = read_migrations('sql')
         with backend.lock():
             backend.apply_migrations(backend.to_apply(migrations))
         rootLogger.debug("migration terminée")
 
     def check_user_exist(self, email):
-        rootLogger.debug("Test de l'existance du mail "+email)
+        rootLogger.debug("Test de l'existance du mail {!r}".format(email))
         curseur = self.cnx.cursor()
-        curseur.execute("SELECT id from FH_user where email='"+email+"'")
+        curseur.execute(
+            "SELECT id from FH_user where email={!r}".format(email))
         result = curseur.fetchall()
 
         if len(result) == 0:
@@ -53,34 +54,35 @@ class fh_bdd:
             return True
 
     def add_user(self, email):
-        rootLogger.debug("Création de l'utilisateur "+email)
+        rootLogger.debug("Création de l'utilisateur {!r}".format(email))
         curseur = self.cnx.cursor()
         curseur.execute(
-            "INSERT INTO `FH_user` (`id`, `email`) VALUES (NULL, '"+email+"')")
+            "INSERT INTO `FH_user` (`id`, `email`) VALUES (NULL, {!r})".format(email))
 
     def get_user(self, email):
-        rootLogger.debug("Récupération de l'utilisateur "+email)
+        rootLogger.debug("Récupération de l'utilisateur {!r}".format(email))
         curseur = self.cnx.cursor()
-        curseur.execute("SELECT id from FH_user where email='"+email+"'")
+        curseur.execute(
+            "SELECT id from FH_user where email={!r}".format(email))
         result = curseur.fetchall()
         # ligne 1, colone 1
         return result[0][0]
 
     def list_hospitals(self, userId):
         rootLogger.debug(
-            "Récupération des hopitaux de l'utilsateur "+str(userId))
+            "Récupération des hopitaux de l'utilsateur {!r} ".format(userId))
         curseur = self.cnx.cursor()
         curseur.execute(
-            "SELECT * from FH_hospital where id_user='"+str(userId)+"'")
+            "SELECT * from FH_hospital where id_user={!r}".format(userId))
         result = curseur.fetchall()
         return result
 
     def add_hospital(self, userid, name):
-        rootLogger.debug("Création de l'hopital "+name +
-                         " pour l'utilisateur "+str(userid))
+        rootLogger.debug(
+            "Création de l'hopital {!r} pour l'utilisateur {!r}".format(name, userid))
         curseur = self.cnx.cursor()
         curseur.execute(
-            "INSERT INTO `FH_hospital` (`id`, `id_user`, `nom`) VALUES (NULL,'"+str(userid)+"' ,%s)", (name,))
+            "INSERT INTO `FH_hospital` (`id`, `id_user`, `nom`) VALUES (NULL,{!r},%s)".format(userid), (name,))
 
     def list_salles(self):
         rootLogger.debug("Récupération des informations des salles")
@@ -89,18 +91,18 @@ class fh_bdd:
         result = {}
         for room in curseur.fetchall():
             rootLogger.debug(
-                "Récupération des informations de la salle"+str(room))
-            room_info={}
+                "Récupération des informations de la salle {!r}".format(room))
+            room_info = {}
             curseur.execute(
-                "SELECT * from FH_Salles_Stats where `id_salles`="+str(room[0]))
+                "SELECT * from FH_Salles_Stats where `id_salles`={!r}".format(room[0]))
             for info_read in curseur.fetchall():
-                salle_lvl=info_read[2]
-                salle_cmp=info_read[3]
-                salle_tim=info_read[4]
-                room_info[salle_lvl]={}
-                room_info[salle_lvl]['comp']=salle_cmp
-                room_info[salle_lvl]['tim']=salle_tim
+                salle_lvl = info_read[2]
+                salle_cmp = info_read[3]
+                salle_tim = info_read[4]
+                room_info[salle_lvl] = {}
+                room_info[salle_lvl]['comp'] = salle_cmp
+                room_info[salle_lvl]['tim'] = salle_tim
             rootLogger.debug(room_info)
-            result[room[1]]=room_info
-        rootLogger.debug("liste_salles="+str(result))
+            result[room[1]] = room_info
+        rootLogger.debug("liste_salles={!r}".format(result))
         return result

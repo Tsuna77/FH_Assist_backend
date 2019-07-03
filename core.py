@@ -9,10 +9,12 @@ from marshmallow import Schema, fields
 # dépendance au moteur API falcon
 import falcon
 
+
 class ResponseSchema(Schema):
     code = fields.Int()
     type = fields.Str(required=True)
     message = fields.Str(required=True)
+
 
 def send_resp(resp, status, code=0, type="", message=""):
     """
@@ -39,14 +41,15 @@ def valid_google_oauth_token(token):
     # validation du token google
     idinfo = id_token.verify_oauth2_token(
         google_token, requests.Request(), CLIENT_ID)
-    rootLogger.debug("idinfo = "+str(idinfo))
+    rootLogger.debug("idinfo = {!r}".format(idinfo))
     if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
         raise ValueError('Wrong issuer.')
-    rootLogger.info("Connexion google réussi pour "+idinfo['email'])
+    rootLogger.info(
+        "Connexion google réussi pour {!r}".format(idinfo['email']))
     return idinfo
 
 
-def connect_from_header_connection(req,resp,db):
+def connect_from_header_connection(req, resp, db):
     """
     Take request
     Send email + base id
@@ -54,14 +57,13 @@ def connect_from_header_connection(req,resp,db):
 
     user = {}
     token = req.get_header('Authorization')
-    rootLogger.debug("Token = "+str(token))
+    #rootLogger.debug("Token = {!r}".format(token))
     # validation du token et récupération de l'id utilisateur
     idinfo = valid_google_oauth_token(token)
     user['email'] = idinfo['email']
     if not db.check_user_exist(user['email']):
         send_resp(resp, falcon.HTTP_401, "401", "error",
                   "Vous devez d'abord vous connecter pour créer un compte")
-    user['id']=db.get_user(user['email'])
-    rootLogger.debug("user = "+str(user))
+    user['id'] = db.get_user(user['email'])
+    rootLogger.debug("user = {!r}".format(user))
     return user
-

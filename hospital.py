@@ -42,7 +42,7 @@ class fh_hospitals:
             send_resp(resp, falcon.HTTP_401, 401, "error", str(e))
             return
         rootLogger.debug(
-            "Récupération des hopitaux de l'utilisateur "+str(user))
+            "Récupération des hopitaux de l'utilisateur {!r}".format(user))
         hospitals = self.db.list_hospitals(user['id'])
         hosp = {}
         hosp['hospitals'] = []
@@ -84,12 +84,12 @@ class fh_hospitals:
             send_resp(resp, falcon.HTTP_400, 400, "error",
                       "Erreur lors de l'analyse du body envoyé")
             return
-        rootLogger.debug("data = "+str(data))
+        rootLogger.debug("data = {!r}".format(data))
 
         try:
             self.db.add_hospital(user['id'], data['name'])
             send_resp(resp, falcon.HTTP_201, 201, "Info",
-                      "L'hopital "+data['name']+" à été créé")
+                      "L'hopital {!s} à été créé".format(data['name']))
         except mysql.connector.Error as e:
             if e.errno == errorcode.ER_DUP_ENTRY:
                 send_resp(resp, falcon.HTTP_409, 409, "error",
