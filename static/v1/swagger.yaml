@@ -26,6 +26,10 @@ paths:
           description: Recuperation de la liste des hopitaux
           schema:
             $ref: '#/definitions/Response'
+        '401':
+          description: Erreur de token
+          schema:
+            $ref: '#/definitions/Response'
     post:
       description: Creation d'un nouvel hopital
       responses:
@@ -37,8 +41,24 @@ paths:
           description: Erreur d'analyse du body
           schema:
             $ref: '#/definitions/Response'
+        '401':
+          description: Erreur de token
+          schema:
+            $ref: '#/definitions/Response'
         '409':
           description: La ressource existe deja
+          schema:
+            $ref: '#/definitions/Response'
+  /salles:
+    get:
+      description: Recuperation de la liste des salles
+      responses:
+        '200':
+          description: Recuperation de la liste des salles
+          schema:
+            $ref: '#/definitions/Response'
+        '401':
+          description: Erreur de token
           schema:
             $ref: '#/definitions/Response'
 swagger: '2.0'

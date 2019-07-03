@@ -29,6 +29,9 @@ class fh_hospitals:
                 200:
                     description: Recuperation de la liste des hopitaux
                     schema: ResponseSchema
+                401:
+                    description: Erreur de token
+                    schema: ResponseSchema
         """
         rootLogger.info("Appel de la commande GET de l'api fh_hospitals")
         try:
@@ -58,6 +61,9 @@ class fh_hospitals:
                     schema: ResponseSchema
                 400:
                     description: Erreur d'analyse du body
+                    schema: ResponseSchema
+                401:
+                    description: Erreur de token
                     schema: ResponseSchema
                 409:
                     description: La ressource existe deja
