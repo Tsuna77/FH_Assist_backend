@@ -3,6 +3,8 @@ from secret import GOOGLE_API_KEY
 from logger import rootLogger
 from bdd import fh_bdd
 from core import send_resp, valid_google_oauth_token, connect_from_header_connection
+import mysql.connector
+from mysql.connector import errorcode
 
 import json
 
@@ -73,9 +75,21 @@ class fh_hospitals:
         try:
             data = json.load(req.stream)
         except Exception as e:
-            send_resp(resp,falcon.HTTP_400,400,"error","Erreur lors de l'analyse du body envoyé")
+            send_resp(resp, falcon.HTTP_400, 400, "error",
+                      "Erreur lors de l'analyse du body envoyé")
             return
         rootLogger.debug("data = "+str(data))
 
-        self.db.add_hospital(user['id'],data['name'])
-
+        try:
+            self.db.add_hospital(user['id'], data['name'])
+            send_resp(resp, falcon.HTTP_201, 201, "Info",
+                      "L'hopital "+data['name']+" à été créé")
+        except mysql.connector.Error as e:
+            if e.errno == errorcode.ER_DUP_ENTRY:
+                send_resp(resp, falcon.HTTP_409, 409, "error",
+                          "L'hopital existe déjà")
+            else:
+                print(e)
+                send_resp(resp, falcon.HTTP_500, 500, "error",
+                          "Erreur non géré")
+            return
