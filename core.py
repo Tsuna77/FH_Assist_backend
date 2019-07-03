@@ -3,11 +3,16 @@ from secret import GOOGLE_API_KEY
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from logger import rootLogger
+from marshmallow import Schema, fields
 
 
 # dépendance au moteur API falcon
 import falcon
 
+class ResponseSchema(Schema):
+    code = fields.Int()
+    type = fields.Str(required=True)
+    message = fields.Str(required=True)
 
 def send_resp(resp, status, code=0, type="", message=""):
     """

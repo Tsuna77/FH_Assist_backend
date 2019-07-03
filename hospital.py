@@ -20,6 +20,14 @@ class fh_hospitals:
         self.db = fh_bdd()
 
     def on_get(self, req, resp):
+        """Recuperation de la liste des hopitaux disponible
+        ---
+            description: Recuperation de la liste des hopitaux
+            responses:
+                200:
+                    description: Recuperation de la liste des hopitaux
+                    schema: ResponseSchema
+        """
         rootLogger.info("Appel de la commande GET de l'api fh_hospitals")
         try:
             user = connect_from_header_connection(req, resp, self.db)
@@ -39,6 +47,20 @@ class fh_hospitals:
         send_resp(resp, falcon.HTTP_200, 200, 'hospitals', hosp)
 
     def on_post(self, req, resp):
+        """Creation d'un nouvel hopital
+        ---
+            description: Creation d'un nouvel hopital
+            responses:
+                200:
+                    description: Recuperation de la liste des hopitaux
+                    schema: ResponseSchema
+                400:
+                    description: Erreur d'analyse du body
+                    schema: ResponseSchema
+                409:
+                    description: La ressource existe deja
+                    schema: ResponseSchema
+        """
         rootLogger.info("Appel de la commande POST de l'api fh_hospitals")
         try:
             user = connect_from_header_connection(req, resp, self.db)

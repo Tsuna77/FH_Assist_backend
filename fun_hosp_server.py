@@ -1,20 +1,27 @@
 #!/usr/bin/env python3
-# coding: utf8
+# -*- coding: utf-8 -*-
 
 # dépendance python native
 import json
 import traceback
 import pathlib
 import sys
+import codecs
+
 
 # dépendance au moteur API falcon
 import falcon
-from falcon_swagger_ui import register_swaggerui_app
+#from falcon_swagger_ui import register_swaggerui_app
+from falcon_apispec import FalconPlugin
+from apispec import APISpec
+from apispec.ext.marshmallow import MarshmallowPlugin
+from marshmallow import Schema, fields
+
 # dépendance de debug
 from wsgiref import simple_server
 
 # dépendance au moteur google Oauth
-from core import send_resp, valid_google_oauth_token
+from core import send_resp, valid_google_oauth_token, ResponseSchema
 
 from hospital import fh_hospitals
 
@@ -40,6 +47,11 @@ def handle_404(req, resp):
 
 
 class fh_login:
+    """Connection à l'api
+    ---
+      description: Connection à l'api
+
+    """
     token = None
     db = None
 
@@ -75,22 +87,35 @@ class fh_login:
 
 try:
     api = falcon.API()
-    api.add_route("/connect", fh_login())
-    api.add_route("/hospitals", fh_hospitals())
+    connect_api=fh_login()
+    hospital_api=fh_hospitals()
+    api.add_route("/connect", connect_api)
+    api.add_route("/hospitals", hospital_api)
     api.add_sink(handle_404, '')
 
     # Ajout du swagger de l'API
-    api.add_static_route('/static', str(STATIC_PATH))
+    api.add_static_route(SWAGGERUI_URL, str(STATIC_PATH))
 except Exception as e:
     rootLogger.error(str(e))
     sys.exit(1)
 
-register_swaggerui_app(
-    api, SWAGGERUI_URL, SCHEMA_URL,
-    page_title=page_title,
-    favicon_url=favicon_url,
-    config={'supportedSubmitMethods': ['get'], }
+spec = APISpec(
+    title='Swagger FH_assistant',
+    version='1.0.0',
+    openapi_version='2.0',
+    plugins=[
+        FalconPlugin(api),
+        MarshmallowPlugin()
+    ],
 )
+
+spec.components.schema('Response', schema=ResponseSchema)
+spec.path(resource=connect_api)
+spec.path(resource=hospital_api)
+f= codecs.open(str(STATIC_PATH)+"/v1/swagger.yaml", "w", "utf-8")
+f.write(spec.to_yaml())
+f.close()
+
 
 if __name__ == '__main__':
     httpd = simple_server.make_server('127.0.0.1', 8000, api)

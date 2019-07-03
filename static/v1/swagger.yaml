@@ -1,66 +1,44 @@
-swagger: "2.0"
-info:
-  description: "API backend pour l'assistant fun hospital développé par la ligue S.e.x.y psychiatrie du serveur EU-04"
-  version: "1.0.0"
-  title: "Swagger FH_Assistant"
-  license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: 
-  - "funhospital.tsuna.fr"
-basePath: "/services"
-tags:
-- name: "connect"
-  description: "Module de connection/enregistrement de compte"
-schemes:
-- "https"
-paths:
-  /connect:
-    post:
-      tags:
-      - "connect"
-      summary: "Connection"
-      description: ""
-      operationId: "connect"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "Information envoyé au serveur pour validation du token google Oauth"
-        required: true
-        schema:
-          $ref: "#/definitions/connect"
-      responses:
-        401:
-          description: "Erreur de validation du token"
-        200:
-          description: "Token accepté et compte connecté"
-        400:
-          description: "Body mal formé"
-securityDefinitions:
-  fhstore_auth:
-    type: "oauth2"
-    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
-    flow: "implicit"
 definitions:
-  connect:
-    type: "object"
-    properties:
-      token:
-        type: "string"
-  ApiResponse:
-    type: "object"
+  Response:
     properties:
       code:
-        type: "integer"
-        format: "int32"
-      type:
-        type: "string"
+        format: int32
+        type: integer
       message:
-        type: "string"
-externalDocs:
-  description: "Find out more about Swagger"
-  url: "http://swagger.io"
+        type: string
+      type:
+        type: string
+    required:
+    - message
+    - type
+    type: object
+info:
+  title: Swagger FH_assistant
+  version: 1.0.0
+paths:
+  /connect:
+    post: {}
+  /hospitals:
+    get:
+      description: Recuperation de la liste des hopitaux
+      responses:
+        '200':
+          description: Recuperation de la liste des hopitaux
+          schema:
+            $ref: '#/definitions/Response'
+    post:
+      description: Creation d'un nouvel hopital
+      responses:
+        '200':
+          description: Recuperation de la liste des hopitaux
+          schema:
+            $ref: '#/definitions/Response'
+        '400':
+          description: Erreur d'analyse du body
+          schema:
+            $ref: '#/definitions/Response'
+        '409':
+          description: La ressource existe deja
+          schema:
+            $ref: '#/definitions/Response'
+swagger: '2.0'
